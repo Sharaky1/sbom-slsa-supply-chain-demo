@@ -1,0 +1,6 @@
+$ cosign verify-blob --key cosign.pub --signature sbom.sig sbom.cdx.json
+Verified OK
+$ sed -i 's/flask/flaxk/' sbom.cdx.json
+$ cosign verify-blob --key cosign.pub --signature sbom.sig sbom.cdx.json
+Error: invalid signature when validating ASN.1 encoded signature
+(Cosign v3.1.4, local key-pair test)

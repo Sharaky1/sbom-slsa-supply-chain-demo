@@ -1,0 +1,9 @@
+Scanner: pip-audit (PyPI advisory data) on requirements.txt
+Package        Version  Advisory records
+pillow         8.1.0    108
+werkzeug       2.0.1    20
+jinja2         3.0.1    10
+requests       2.25.0   8
+flask          2.0.1    4
+pyyaml         5.3.1    2
+Total: 152 records, 95 unique IDs, 77 unique CVEs

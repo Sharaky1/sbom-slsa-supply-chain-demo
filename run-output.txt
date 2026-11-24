@@ -1,0 +1,16 @@
+=== 1. SBOM (Syft, run from repo root)
+CycloneDX 1.7, 11 components
+actions/checkout v4, actions/upload-artifact v4, anchore/sbom-action v0, anchore/scan-action v4, flask 2.0.1, jinja2 3.0.1, pillow 8.1.0, pyyaml 5.3.1, requests 2.25.0, sigstore/cosign-installer v3, werkzeug 2.0.1
+
+=== 2. Vulnerability scan (pip-audit on requirements.txt)
+Found 152 known vulnerabilities in 6 packages
+
+=== 3. Sign, verify, tamper (Cosign, local key)
+Wrote signature to file sbom.sig
+Verified OK
+Error: invalid signature when validating ASN.1 encoded signature
+
+=== 4. App
+Supply chain demo app
+
+Not run in sandbox: Grype (vulnerability DB host blocked) and the GitHub Actions workflow (needs GitHub).
