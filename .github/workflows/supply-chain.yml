@@ -1,0 +1,35 @@
+name: supply-chain
+on: [push]
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  sbom-scan-sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SBOM (Syft, CycloneDX)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: sbom.cdx.json
+          upload-artifact: false
+      - name: Scan SBOM (Grype)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype sbom:sbom.cdx.json -o table
+      - uses: sigstore/cosign-installer@v3
+      - name: Sign SBOM (keyless)
+        run: cosign sign-blob --yes --bundle sbom.cdx.json.bundle sbom.cdx.json
+      - name: Verify signature
+        run: |
+          cosign verify-blob sbom.cdx.json --bundle sbom.cdx.json.bundle \
+            --certificate-identity-regexp "https://github.com/${{ github.repository }}/" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom-and-signature
+          path: |
+            sbom.cdx.json
+            sbom.cdx.json.bundle
